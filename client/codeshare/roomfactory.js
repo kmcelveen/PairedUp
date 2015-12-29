@@ -5,9 +5,7 @@ $rootScope - it is used in order to invoke the $digest loop, once socket.io even
 
 $q - in order to provide promise based interface
 
-Io - the wrapped socket.io global function
-
-config - the configuration constant we defined in app.js.
+Io - the wrapped socket.io global function 
 
  */
 angular.module('myApp')
@@ -111,6 +109,7 @@ angular.module('myApp')
       });
       //fired when peer disconnects
       socket.on('peer.disconnected', function (data) {
+        // console.log(data);
         api.trigger('peer.disconnected', [data]);
         if (!$rootScope.$$digest) {
           $rootScope.$apply();

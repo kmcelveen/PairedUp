@@ -4,7 +4,7 @@ angular.module('myApp', [
 	'ui.bootstrap',
 	// 'myApp.codeshare',
    //for client side sockets
-  'btford.socket-io',
+  'btford.socket-io'
   // 'myApp.services',
   // 'myApp.current'
 
@@ -34,22 +34,22 @@ angular.module('myApp', [
       controller: 'ProfileController'
     })
 
-      .state('profile.currentskills', {
-        url: '/currentskills',
-        templateUrl: 'userprofile/currentskills.html',
-        controller: 'CurrentSkillsController'
-      })
-      .state('profile.futureskills', {
-        url: '/futureskills',
-        templateUrl: 'userprofile/futureskills.html',
-        controller: 'ProfileController'
-      })
+    .state('profile.currentskills', {
+      url: '/currentskills',
+      templateUrl: 'userprofile/currentskills.html',
+      controller: 'CurrentSkillsController'
+    })
+    .state('profile.futureskills', {
+      url: '/futureskills',
+      templateUrl: 'userprofile/futureskills.html',
+      controller: 'ProfileController'
+    })
 
-       .state('profile.summary', {
-        url: '/summary',
-        templateUrl: 'userprofile/summary.html',
-        controller: 'ProfileController'
-      })
+     .state('profile.summary', {
+      url: '/summary',
+      templateUrl: 'userprofile/summary.html',
+      controller: 'ProfileController'
+    })
 
 		.state('codeshare', {
 			url: '/codeshare',

@@ -29,7 +29,7 @@ angular.module('myApp')
         //otherwise we create a new room. Once the room is created we redirect the user to the room's URL.
         Room.createRoom()
         .then(function (roomId) {
-          $location.path('/room/' + roomId);
+          $location.path('/codeshare/room/' + roomId);
         });
       } else {
         //If it is provided we simply join the room with the associated roomId: Room.joinRoom($routeParams.roomId);
@@ -54,6 +54,7 @@ angular.module('myApp')
     Room.on('peer.disconnected', function (peer) {
       console.log('Client disconnected, removing stream');
       //When we receive this event we can simply remove the disconnected peer from the $scope.peers collection.
+      // VideoStream.stop_it();
       $scope.peers = $scope.peers.filter(function (p) {
         return p.id !== peer.id;
       });
@@ -62,4 +63,7 @@ angular.module('myApp')
     $scope.getLocalVideo = function () {
       return $sce.trustAsResourceUrl(stream);
     };
+    // $scope.stopvideo = function(){
+    //   return 
+    // }
   });

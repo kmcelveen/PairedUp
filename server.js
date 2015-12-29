@@ -7,10 +7,7 @@ var fs = require('fs');
 //Need if we want to check req.file; 
 var multer  = require('multer')
 var cookieParser = require('cookie-parser');
-// var cors = require('cors');
 var request = require('request');
-// var jwt = require('jwt-simple');
-// var moment = require('moment');
 var path = require('path');
 var config = require('./config.js');
 var mongoose = require('mongoose');
@@ -26,6 +23,10 @@ var logger = require('morgan');
 var uuid = require('node-uuid');
 var rooms = {};
 var userIds = {};
+
+// var jwt = require('jwt-simple');
+// var moment = require('moment');
+// var cors = require('cors');
 // var router = express.Router();
 
 //I believe we need if we want to check req.file
@@ -63,6 +64,7 @@ app.use(express.static(__dirname + '/client'));
 
 //serves up static files, otherwise we would not be able to load angular (and all the other bower components) in the index.html file
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+
 // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
 app.use(passport.initialize());
@@ -358,6 +360,7 @@ io.on('connection', function(socket) {
           io.emit('publish message', foundMessages);
         })
       });
+
 //general code
   socket.on('/create', function(data) {
     usersRoom = data.title
@@ -372,11 +375,12 @@ io.on('connection', function(socket) {
   
       //Sending a signal to the front end, along with the message from chat. This is so we can test the chat feature. Will build off of it later. 
 
-    /* 
 
-    Stuff for WebRtc
+    /******************************************** 
 
-    */
+                Stuff for WebRtc
+
+    *********************************************/
         var currentRoom, id;
     //The init event is used for initialization of given room. 
 
@@ -432,6 +436,7 @@ io.on('connection', function(socket) {
           delete rooms[currentRoom][rooms[currentRoom].indexOf(socket)];
           rooms[currentRoom].forEach(function (socket) {
             if (socket) {
+              // console.log('this is the socket', socket);
               // After that we emit peer.disconnected event to all other peers in the room, with the id of the disconnected peer. This way all peers connected to the disconnected peer will be able to remove the video element associated with the disconnected client.
               socket.emit('peer.disconnected', { id: id });
             }

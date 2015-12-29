@@ -29,21 +29,7 @@ angular.module('myApp')
   // $http.get('/checkIfLoggedIn').then(function(response){
   //   console.log("response from checkIfLoggedIn", response);
   // });
-  // var comm = new Icecomm('');
-
-  //       comm.connect('test');
-
-  //       comm.on('local', function(peer) {
-  //         localVideo.src = peer.stream;
-  //       });
-
-  //       comm.on('connected', function(peer) {
-  //         document.body.appendChild(peer.getVideo());
-  //       });
-
-  //       comm.on('disconnect', function(peer) {
-  //         document.getElementById(peer.ID).remove();
-  //       });
+  
   //Will use to hold all the text in editor
   $scope.textInEditor;
   $scope.doc;
@@ -128,6 +114,7 @@ angular.module('myApp')
 
   $scope.add = function(){
     $scope.id++;
+    console.log('heyeyyyy');
     var total = $scope.id + $scope.removeid;
     $scope.filesList.push({id: total, title: $scope.title, code: $scope.aceModel, mode: $scope.mode});
     $scope.filesList[total - 1].title += $scope.fileTypes[$scope.mode];
