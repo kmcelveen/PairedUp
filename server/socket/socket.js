@@ -81,8 +81,8 @@ function initiation(server) {
 
   //We also have a callback (fn), which we invoke with the client's ID and the room's id, once the client has successfully connected.
           fn(currentRoom, id);
-          room.forEach(function (s) {
-            s.emit('peer.connected', { id: id });
+          room.forEach(function (success) {
+            success.emit('peer.connected', { id: id });
           });
           room[id] = socket;
           console.log('Peer connected to room', currentRoom, 'with #', id);
@@ -91,7 +91,7 @@ function initiation(server) {
 
       //The msg event is an SDP message or ICE candidate, which should be redirected from specific peer to another peer:
     socket.on('msg', /*socketUtils.msg*/function (data) {
-    //The id of given peer is always an integer so that's why we parse it as first line of the event handler. 
+    //The id of given peer is an integer so we parse it 
           var to = parseInt(data.to, 10);
           if (rooms[currentRoom] && rooms[currentRoom][to]) {
             console.log('Redirecting message to', to, 'by', data.by);
