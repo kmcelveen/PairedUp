@@ -3,7 +3,7 @@ angular.module('myApp')
   .factory('VideoMediaStream', function ($q) {
     var stream;
     return {
-      get: function () {
+      getMediaStream: function () {
         if (stream) {
           return $q.when(stream);
         } else {

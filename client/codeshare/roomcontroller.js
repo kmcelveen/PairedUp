@@ -17,9 +17,9 @@ angular.module('myApp')
     }
     var stream;
     /*
-    VideoStream.get() returns a promise, which once resolved gives us the media stream of the user. When the promise is resolved we initialize the Room passing the stream as argument. In order to visualize the video captured by our web cam we use URL.createObjectURL, to be able to set it as src of a video element in our HTML.
+    returns a promise, which once resolved gives us the media stream of the user. When the promise is resolved we initialize the Room passing the stream as argument. In order to visualize the video captured by our web cam we use URL.createObjectURL, to be able to set it as src of a video element in our HTML.
     */
-    VideoMediaStream.get()
+    VideoMediaStream.getMediaStream()
     .then(function (mediaObject) {
       stream = mediaObject;
       Room.init(stream);
@@ -27,7 +27,7 @@ angular.module('myApp')
       //check whether the roomId is provided
       if (!$stateParams.roomId) {
         //otherwise we create a new room. Once the room is created we redirect the user to the room's URL.
-        Room.createRoom()
+        Room.createNewRoom()
         .then(function (roomId) {
           $location.path('/codeshare/room/' + roomId);
         })

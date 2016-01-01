@@ -34,7 +34,7 @@ angular.module('myApp')
       pc.onaddstream = function (event) {
         console.log('Received new stream');
         //We can trigger peer.stream event and later visualize it in a video element on the page.
-        publicApi.trigger('peer.stream', [{
+        roomUtils.trigger('peer.stream', [{
           id: id,
           stream: event.stream
         }]);
@@ -46,7 +46,7 @@ angular.module('myApp')
     }
     //new offer is being initiated, when a peer connects the room
     //Once new peer joins the room makeOffer is invoked with the peer's id
-    function makeOffer(id) {
+    function makeOfferToPeer(id) {
       // The first thing we do is to getPeerConnection
       //If connection with the specified peer id already exists getPeerConnection will return it, otherwise it will create a new RTCPeerConnection and attach the required event handlers to it
       var pc = getPeerConnection(id);
@@ -60,7 +60,7 @@ angular.module('myApp')
       }, function (e) {
         console.log(e);
       },
-      { mandatory: { OfferToReceiveVideo: true, OfferToReceiveAudio: true }});
+      { mandatoryContraints: { OfferToReceiveVideo: true, OfferToReceiveAudio: true }});
     }
 
     function handleMessage(data) {
@@ -103,15 +103,15 @@ angular.module('myApp')
     var socket = Io.connect("http://localhost:8080"),
         connected = false;
 
-    function addHandlers(socket) {
+    function addHandlersToSocket(socket) {
         //fired when new peer joins the room.
       socket.on('peer.connected', function (params) {
         //Once this event is fired we initiate new SDP offer to this peer 
-        makeOffer(params.id);
+        makeOfferToPeer(params.id);
       });
       //fired when peer disconnects
       socket.on('peer.disconnected', function (data) {
-        publicApi.trigger('peer.disconnected', [data]);
+        roomUtils.trigger('peer.disconnected', [data]);
         if (!$rootScope.$$digest) {
           $rootScope.$apply();
         }
@@ -121,10 +121,8 @@ angular.module('myApp')
         handleMessage(data);
       });
     }
-    //Room provides the following public API:
-    var publicApi = {
-
-      // joinRoom is used for joining already existing rooms
+    
+    var roomUtils = {
       joinRoom: function (room) {
         if (!connected) {
           socket.emit('init', { room: room }, function (roomid, id) {
@@ -134,8 +132,7 @@ angular.module('myApp')
           connected = true;
         }
       },
-      //createRoom is used for creating new rooms
-      createRoom: function () {
+      createNewRoom: function () {
         var d = $q.defer();
         socket.emit('init', null, function (roomid, id) {
           d.resolve(roomid);
@@ -150,8 +147,8 @@ angular.module('myApp')
         stream = media;
       }
     };
-    EventEmitter.call(publicApi);
-    Object.setPrototypeOf(publicApi, EventEmitter.prototype);
-    addHandlers(socket);
-    return publicApi;
+    EventEmitter.call(roomUtils);
+    Object.setPrototypeOf(roomUtils, EventEmitter.prototype);
+    addHandlersToSocket(socket);
+    return roomUtils;
   });
