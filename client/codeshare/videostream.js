@@ -1,8 +1,7 @@
 //VideoStream uses $q in order to provide a video stream using getUserMedia. 
 angular.module('myApp')
-  .factory('VideoStream', function ($q) {
+  .factory('VideoMediaStream', function ($q) {
     var stream;
-    var localStream;
     return {
       get: function () {
         if (stream) {
@@ -15,40 +14,14 @@ angular.module('myApp')
           navigator.getUserMedia({
             video: true,
             audio: true
-          }, function (s) {
-            stream = s;
+          }, function (mediaObject) {
+            stream = mediaObject;
             d.resolve(stream);
-          }, function (e) {
-            d.reject(e);
+          }, function (error) {
+            d.reject(error);
           });
           return d.promise;
         }
       }
-
-      // stop_it: function(){
-      //   navigator.getUserMedia({
-      //       video: true,
-      //       audio: true
-      //     }, function(s){
-      //       localStream = s
-      //       var audioTracks = localStream.getAudioTracks();
-      //       var videoTracks = localStream.getVideoTracks();
-
-      //       // if MediaStream has reference to microphone
-      //       if (audioTracks[0]) {
-      //           audioTracks[0].enabled = false;
-      //       }
-
-      //       // if MediaStream has reference to webcam
-      //       if (videoTracks[0]) {
-      //           videoTracks[0].enabled = false;
-      //       }
-      //       // var test = localStream.getVideoTracks()[0];
-      //       // test.stop();
-      //       // localStream = null;
-      //     }, function(err){
-      //       console.log(err);
-      //     });
-      // }
     };
   });

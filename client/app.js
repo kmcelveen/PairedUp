@@ -3,15 +3,16 @@ angular.module('myApp', [
 	'ui.ace',
 	'ui.bootstrap',
   'btford.socket-io'
+
 ])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider){
 
 	$stateProvider
 	
-	.state('login', {
-		url: '/login',
-		// controller: 'NavbarController'
-	})
+    .state('login', {
+    	url: '/login',
+    	// controller: 'NavbarController'
+    })
     .state('logout', {
       url: '/logout',
       template: null,
@@ -22,13 +23,11 @@ angular.module('myApp', [
       templateUrl: 'userprofile/userprofile.html',
       controller: 'ProfileController'
     })
-
     .state('profile.start', {
       url: '/start',
       templateUrl: 'userprofile/start.html',
       controller: 'ProfileController'
     })
-
     .state('profile.currentskills', {
       url: '/currentskills',
       templateUrl: 'userprofile/currentskills.html',
@@ -39,27 +38,25 @@ angular.module('myApp', [
       templateUrl: 'userprofile/futureskills.html',
       controller: 'ProfileController'
     })
-
-   .state('profile.summary', {
-    url: '/summary',
-    templateUrl: 'userprofile/summary.html',
-    controller: 'ProfileController'
+     .state('profile.summary', {
+      url: '/summary',
+      templateUrl: 'userprofile/summary.html',
+      controller: 'ProfileController'
     })
-
-	.state('codeshare', {
-		url: '/codeshare',
-		templateUrl: 'codeshare/codeshare.html',
-		controller: 'CodeShareController'
+    .state('codeshare', {
+    	url: '/codeshare',
+    	templateUrl: 'codeshare/codeshare.html',
+    	controller: 'CodeShareController'
     })
-  .state('codeshare.room2', {
-    url: '/room/:roomId',
-    templateUrl: 'codeshare/room.html',
-    controller: 'RoomCtrl'
+    .state('codeshare.room2', {
+      url: '/room/:roomId',
+      templateUrl: 'codeshare/room.html',
+      controller: 'RoomController'
     })
     .state('codeshare.room', {
       url: '/room',
       templateUrl: 'codeshare/room.html',
-      controller: 'RoomCtrl'
+      controller: 'RoomController'
     })
     .state('chat', {
       url: '/chat',
@@ -70,6 +67,11 @@ angular.module('myApp', [
 	$urlRouterProvider.otherwise('/');
 
 });
+
+
+
+
+
 
 Object.setPrototypeOf = Object.setPrototypeOf || function(obj, proto) {
   obj.__proto__ = proto;

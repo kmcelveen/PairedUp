@@ -5,14 +5,16 @@ $rootScope - it is used in order to invoke the $digest loop, once socket.io even
 
 $q - in order to provide promise based interface
 
-Io - the wrapped socket.io global function 
+Io - the wrapped socket.io global function
+
 
  */
 angular.module('myApp')
   .factory('Room', function ($rootScope, $q, Io) {
     var iceConfig = { 'iceServers': [{ 'url': 'stun:stun.l.google.com:19302' }]},
         peerConnections = {},
-        currentId, roomId,
+        currentId, 
+        roomId,
         stream;
     //This method uses peerConnections object, which creates a mapping between peer id and RTCPeerConnection object
     function getPeerConnection(id) {
@@ -25,16 +27,16 @@ angular.module('myApp')
       peerConnections[id] = pc;
       pc.addStream(stream);
       //we add the event handlers onicecandidate and onaddstream, we cache it and we return it.
-      pc.onicecandidate = function (evnt) {
-        socket.emit('msg', { by: currentId, to: id, ice: evnt.candidate, type: 'ice' });
+      pc.onicecandidate = function (event) {
+        socket.emit('msg', { by: currentId, to: id, ice: event.candidate, type: 'ice' });
       };
       //Once onaddstream is triggered, this means that the connection was successfully initiated
-      pc.onaddstream = function (evnt) {
+      pc.onaddstream = function (event) {
         console.log('Received new stream');
         //We can trigger peer.stream event and later visualize it in a video element on the page.
-        api.trigger('peer.stream', [{
+        publicApi.trigger('peer.stream', [{
           id: id,
-          stream: evnt.stream
+          stream: event.stream
         }]);
         if (!$rootScope.$$digest) {
           $rootScope.$apply();
@@ -109,8 +111,7 @@ angular.module('myApp')
       });
       //fired when peer disconnects
       socket.on('peer.disconnected', function (data) {
-        // console.log(data);
-        api.trigger('peer.disconnected', [data]);
+        publicApi.trigger('peer.disconnected', [data]);
         if (!$rootScope.$$digest) {
           $rootScope.$apply();
         }
@@ -121,12 +122,12 @@ angular.module('myApp')
       });
     }
     //Room provides the following public API:
-    var api = {
+    var publicApi = {
 
       // joinRoom is used for joining already existing rooms
-      joinRoom: function (r) {
+      joinRoom: function (room) {
         if (!connected) {
-          socket.emit('init', { room: r }, function (roomid, id) {
+          socket.emit('init', { room: room }, function (roomid, id) {
             currentId = id;
             roomId = roomid;
           });
@@ -145,13 +146,12 @@ angular.module('myApp')
         return d.promise;
       },
       //init is used for initializing the Room service
-      init: function (s) {
-        stream = s;
+      init: function (media) {
+        stream = media;
       }
     };
-    EventEmitter.call(api);
-    Object.setPrototypeOf(api, EventEmitter.prototype);
-
+    EventEmitter.call(publicApi);
+    Object.setPrototypeOf(publicApi, EventEmitter.prototype);
     addHandlers(socket);
-    return api;
+    return publicApi;
   });

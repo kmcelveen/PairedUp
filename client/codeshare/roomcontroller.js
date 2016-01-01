@@ -8,7 +8,7 @@ $scope - used for attaching data to it in order to achieve data-binding with the
 Room - service which we are going to define next. It is used for managing the peer connections.
 */
 angular.module('myApp')
-  .controller('RoomCtrl', function ($sce, VideoStream, $location, $stateParams, $scope, Room) {
+  .controller('RoomController', function ($sce, VideoMediaStream, $location, $stateParams, $scope, Room) {
 
     //check whether WebRTC is supported. If it isn't we simply set content of the $scope.error property and stop the controller execution.
     if (!window.RTCPeerConnection || !navigator.getUserMedia) {
@@ -19,9 +19,9 @@ angular.module('myApp')
     /*
     VideoStream.get() returns a promise, which once resolved gives us the media stream of the user. When the promise is resolved we initialize the Room passing the stream as argument. In order to visualize the video captured by our web cam we use URL.createObjectURL, to be able to set it as src of a video element in our HTML.
     */
-    VideoStream.get()
-    .then(function (s) {
-      stream = s;
+    VideoMediaStream.get()
+    .then(function (mediaObject) {
+      stream = mediaObject;
       Room.init(stream);
       stream = URL.createObjectURL(stream);
       //check whether the roomId is provided
@@ -30,13 +30,13 @@ angular.module('myApp')
         Room.createRoom()
         .then(function (roomId) {
           $location.path('/codeshare/room/' + roomId);
-        });
+        })
       } else {
         //If it is provided we simply join the room with the associated roomId: Room.joinRoom($routeParams.roomId);
         Room.joinRoom($stateParams.roomId);
       }
     }, function () {
-      $scope.error = 'No audio/video permissions. Please refresh your browser and allow the audio/video capturing.';
+      $scope.error = 'No audio/video permissions..';
     });
     $scope.peers = [];
     //peer.stream - a peer stream is received.
@@ -54,16 +54,12 @@ angular.module('myApp')
     Room.on('peer.disconnected', function (peer) {
       console.log('Client disconnected, removing stream');
       //When we receive this event we can simply remove the disconnected peer from the $scope.peers collection.
-      // VideoStream.stop_it();
-      $scope.peers = $scope.peers.filter(function (p) {
-        return p.id !== peer.id;
+      $scope.peers = $scope.peers.filter(function (peer) {
+        return peer.id !== peer.id;
       });
     });
     //get the local stream (your cam)
     $scope.getLocalVideo = function () {
       return $sce.trustAsResourceUrl(stream);
     };
-    // $scope.stopvideo = function(){
-    //   return 
-    // }
   });
