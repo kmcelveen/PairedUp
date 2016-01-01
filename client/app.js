@@ -3,7 +3,6 @@ angular.module('myApp', [
 	'ui.ace',
 	'ui.bootstrap',
   'btford.socket-io'
-
 ])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider){
 
@@ -23,11 +22,6 @@ angular.module('myApp', [
       templateUrl: 'userprofile/userprofile.html',
       controller: 'ProfileController'
     })
-    .state('profile.start', {
-      url: '/start',
-      templateUrl: 'userprofile/start.html',
-      controller: 'ProfileController'
-    })
     .state('profile.currentskills', {
       url: '/currentskills',
       templateUrl: 'userprofile/currentskills.html',
@@ -36,12 +30,12 @@ angular.module('myApp', [
     .state('profile.futureskills', {
       url: '/futureskills',
       templateUrl: 'userprofile/futureskills.html',
-      controller: 'ProfileController'
+      controller: 'FutureSkillsController'
     })
-     .state('profile.summary', {
+   .state('profile.summary', {
       url: '/summary',
       templateUrl: 'userprofile/summary.html',
-      controller: 'ProfileController'
+      controller: 'SummaryController'
     })
     .state('codeshare', {
     	url: '/codeshare',
@@ -62,7 +56,17 @@ angular.module('myApp', [
       url: '/chat',
       templateUrl: 'chat/chat.html',
       controller: 'ChatController'
-    });
+    })
+    .state('chat.rooms', {
+      url: '/chatrooms',
+      templateUrl: 'chat/chatrooms.html',
+      controller: 'ChatRoomController'
+    })
+    .state('chat.contacts', {
+      url: '/contacts',
+      templateUrl: 'chat/contacts.html',
+      controller: 'ContactController'
+    })
 
 	$urlRouterProvider.otherwise('/');
 
